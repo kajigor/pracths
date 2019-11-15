@@ -13,11 +13,18 @@ data Vec (n :: Nat) (a :: Type) where
 vhead :: Vec ('Succ n) a -> a
 vhead (VCons x _) = x
 
+vtail :: Vec ('Succ n) a -> Vec n a
+vtail (VCons _ x) = x 
 
 type family Plus (m :: Nat) (n :: Nat) :: Nat where
   Plus 'Zero n = n
   Plus ('Succ m) n = 'Succ (Plus m n)
 --  Plus ('Succ m) n = Plus m ('Succ n)
+
+type family Minus (m :: Nat) (n :: Nat) :: Nat where 
+  Minus 'Zero ('Succ _) = TypeError ('Text "Difference is negative") 
+  Minus m 'Zero = m 
+  Minus ('Succ m) ('Succ n) = Minus m n 
 
 vappend :: Vec m a -> Vec n a -> Vec (Plus m n) a
 vappend VNil ys = ys

@@ -2,10 +2,10 @@ module Test.Some where
 
 import Test.HUnit
 
-import Data.Function ((&))
+-- import Data.Function ((&))
 
 import Some
-import qualified Some as PM
+-- import qualified Some as PM
 
 
 unit_showVariantTypeBool :: Assertion

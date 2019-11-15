@@ -35,12 +35,30 @@ hprop_toFrom = property $ do
   let Just n = Nat.fromIntegral i
   i === Nat.toNum n
 
+nat :: R.Range Int -> Gen Nat
+nat range = G.just (Nat.fromIntegral <$> G.int range)
 
-nat :: Gen Nat
-nat = G.just (Nat.fromIntegral <$> G.int (R.linear 0 100000))
+nat' :: Gen Nat
+nat' = nat (R.linear 0 100000)
 
 hprop_plus :: Property
 hprop_plus = property $ do
-  m <- forAll nat
-  n <- forAll nat
+  m <- forAll nat'
+  n <- forAll nat'
   Nat.toNum m + Nat.toNum n === (Nat.toNum (m `Nat.plus` n) :: Integer)
+
+hprop_plus' :: Property
+hprop_plus' = property $ do
+  m <- forAll nat'
+  n <- forAll nat'
+  Nat.toNum m + Nat.toNum n === (Nat.toNum (m `Nat.plus'` n) :: Integer)
+
+hprop_minus :: Property
+hprop_minus = property $ do
+  m <- forAll nat'
+  n <- forAll nat'
+  let difference = m `Nat.minus` n 
+  let expected = Nat.toNum m - Nat.toNum n
+  if expected >= 0
+  then Just expected === (Nat.toNum <$> difference :: Maybe Integer)
+  else Nothing === difference

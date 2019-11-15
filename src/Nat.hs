@@ -6,11 +6,23 @@ module Nat where
 data Nat where
   Zero :: Nat
   Succ :: Nat -> Nat
+  deriving (Eq)
 
 
 plus :: Nat -> Nat -> Nat
 plus Zero n = n
 plus (Succ m) n = Succ (m `plus` n)
+
+plus' :: Nat -> Nat -> Nat 
+plus' x y = go x y Zero where 
+  go Zero Zero acc = acc 
+  go Zero (Succ m) acc = go Zero m (Succ acc)
+  go (Succ n) m acc = go n m (Succ acc)
+
+minus :: Nat -> Nat -> Maybe Nat 
+minus (Succ x) (Succ y) = minus x y 
+minus x Zero = Just x 
+minus Zero (Succ _) = Nothing 
 
 toNum :: Num n => Nat -> n
 toNum = go 0

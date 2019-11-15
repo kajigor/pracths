@@ -26,3 +26,11 @@ hprop_vtake3of4 = property $ do
   (a, b, c, d) <- forAll $ (,,,) <$> genint <*> genint <*> genint <*> genint
   let v = VCons a $ VCons b $ VCons c $ VCons d $ VNil
   "Vec{3}[" <> show a <> "," <> show b <> "," <> show c <> "]" === show (vtake @Three v)
+
+
+hprop_vtail :: Property
+hprop_vtail = property $ do
+  let genint = G.int R.linearBounded
+  (a, b, c, d) <- forAll $ (,,,) <$> genint <*> genint <*> genint <*> genint
+  let v = VCons a $ VCons b $ VCons c $ VCons d $ VNil
+  "Vec{3}[" <> show b <> "," <> show c <> "," <> show d <> "]" === show (vtail v)
